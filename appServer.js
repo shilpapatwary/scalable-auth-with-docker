@@ -8,6 +8,10 @@ const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const RedisStore = require('connect-redis')(session);
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+
+const swaggerDocument = YAML.load('./boardsSwagger.yml');
 
 require('./config/dbConnection');
 
@@ -61,6 +65,7 @@ app.use('/trello', (req, res, next) => { req.user ? next() : res.status(403).sen
 app.use('/api/boards', boardsRouter);
 app.use('/api/workspaces', jwtAuth.authenticate('jwt', { session: false }), workspacesRouter);
 app.use('/api/channels', channelsRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((err, req, res, next) => {
   if (err) res.set(500).send('Some error occured, Please try again later!');
