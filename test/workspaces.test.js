@@ -203,7 +203,7 @@ mocha.describe('Slack Application', () => {
           name: 'user1',
         })
         .expect('content-type', /json/)
-        .expect(200)
+        .expect(202)
         .end((error, res) => {
           should.not.exist(error);
           res.body.users.length.should.not.be.eql(0);
